@@ -29,30 +29,41 @@ namespace Server
                 byte[] buffer = new byte[1024];
                 while (true)
                 {
-                    int receivedBytes = serverSocket.ReceiveFrom(buffer, ref clientEndPoint);
-                    string message = Encoding.UTF8.GetString(buffer, 0, receivedBytes); //ubaciti dekript
-                    Console.WriteLine($"Poruka od {clientEndPoint}: {message}");
+                    try
+                    {
+                        int receivedBytes = serverSocket.ReceiveFrom(buffer, ref clientEndPoint);
+                        string message = Encoding.UTF8.GetString(buffer, 0, receivedBytes); //ubaciti dekript
+                        Console.WriteLine($"Poruka od {clientEndPoint}: {message}");
 
-                    if (message.ToLower() == "kraj") break;
+                        if (message.ToLower() == "kraj") break;
 
-                    string response = $"Server odgovor, poruka: {message} mora biti kriptovana"; //ubaciti kript
-                    byte[] responseBytes = Encoding.UTF8.GetBytes(response);
-                    serverSocket.SendTo(responseBytes, clientEndPoint);
+                        string response = $"Server odgovor, poruka: {message} mora biti kriptovana"; //ubaciti kript
+                        byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                        serverSocket.SendTo(responseBytes, clientEndPoint);
+                    }
+                    catch (SocketException ex)
+                    {
+                        Console.WriteLine($"Doslo je do greske tokom prijema poruke: \n{ex}");
+                    }
                 }
+                #region Zatvaranje
+
+                serverSocket.Close();
+                Console.WriteLine("UDP Server završio sa radom.");
+                Console.ReadKey();
+
+                #endregion
             }
             else if(protocol == "TCP")
             {
-
-
+               //TODO
             }
 
             #endregion
 
-
-
-            Console.ReadKey();
         }
 
+        #region Provera unosa
         static string CheckValidInput()
         {
             Console.Write("Unesite zeljeni protocol za rad Servera (TCP ili UDP): ");
@@ -65,6 +76,7 @@ namespace Server
             }
             return input;
         }
+        #endregion
 
     }
 }

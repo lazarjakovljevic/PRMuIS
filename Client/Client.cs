@@ -60,6 +60,12 @@ namespace Client
 
                             string response = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
                             Console.WriteLine($"Server: {response}");
+
+                            if (response.ToLower() == "kraj")
+                            {
+                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                break;
+                            }
                         }
                         catch (SocketException ex)
                         {

@@ -5,3 +5,10 @@ C:\Users\User\Desktop\Projekat Mreze\Server\obj\Debug\Server.csproj.AssemblyRefe
 C:\Users\User\Desktop\Projekat Mreze\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
 C:\Users\User\Desktop\Projekat Mreze\Server\obj\Debug\Server.exe
 C:\Users\User\Desktop\Projekat Mreze\Server\obj\Debug\Server.pdb
+D:\FAKS\MREZE\Project\Server\bin\Debug\Server.exe.config
+D:\FAKS\MREZE\Project\Server\bin\Debug\Server.exe
+D:\FAKS\MREZE\Project\Server\bin\Debug\Server.pdb
+D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+D:\FAKS\MREZE\Project\Server\obj\Debug\Server.exe
+D:\FAKS\MREZE\Project\Server\obj\Debug\Server.pdb

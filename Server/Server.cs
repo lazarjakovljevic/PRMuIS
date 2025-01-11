@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Server
 {
@@ -17,7 +14,7 @@ namespace Server
                 #region Odabir protokola
 
                 string protocol = CheckValidInput();
-                Console.WriteLine($"Izabrali ste protocol: {protocol}");
+                Console.WriteLine($"Izabrani protokol: {protocol}");
 
                 #endregion
 
@@ -29,36 +26,40 @@ namespace Server
 
                     Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                     IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50001);
+                    EndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
                     serverSocket.Bind(serverEP);
 
-                    Console.WriteLine($"Server je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
-
-                    EndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
 
                     #endregion
 
                     #region Komunikacija
 
                     byte[] buffer = new byte[1024];
+
                     while (true)
                     {
                         try
-                        {
+                        {   
                             int numOfBytes = serverSocket.ReceiveFrom(buffer, ref clientEndPoint);
 
                             if (numOfBytes == 0)
                             {
-                                Console.WriteLine("Klijent je zavrsio sa radom");
+                                Console.WriteLine("\nKlijent je zavrsio sa radom.");
                                 break;
                             }
 
-                            string message = Encoding.UTF8.GetString(buffer, 0, numOfBytes); //ubaciti dekript
-                            Console.WriteLine($"Poruka od {clientEndPoint}: {message}");
+                            string message = Encoding.UTF8.GetString(buffer, 0, numOfBytes).Trim(); //ubaciti dekript
+                            Console.WriteLine($"\nPoruka od \"{clientEndPoint}\": {message}");
 
                             if (message.ToLower() == "kraj")
+                            {
+                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
                                 break;
+                            }
 
-                            Console.Write("\nUnesite poruku: ");
+                            Console.Write("\nUnesi poruku: ");
                             string response = Console.ReadLine();
 
                             byte[] responseBytes = Encoding.UTF8.GetBytes(response);
@@ -73,7 +74,7 @@ namespace Server
 
                         catch (SocketException ex)
                         {
-                            Console.WriteLine($"Doslo je do greske tokom prijema poruke: \n{ex}");
+                            Console.WriteLine($"Doslo je do greske tokom prijema poruke.\n{ex}");
                         }
                     }
 
@@ -82,7 +83,7 @@ namespace Server
                     #region Zatvaranje uticnice
 
                     serverSocket.Close();
-                    Console.WriteLine("UDP Server završio sa radom.");
+                    Console.WriteLine("UDP Server zavrsio sa radom.");
 
                     #endregion
                 }
@@ -96,19 +97,19 @@ namespace Server
                     #region Inicijalizacija i povezivanje
 
                     Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
                     IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50001);
 
                     serverSocket.Bind(serverEP);
-
                     serverSocket.Listen(2);
 
-                    Console.WriteLine($"Server je stavljen u stanje osluskivanja i ocekuje komunikaciju na {serverEP}");
+                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
 
                     Socket acceptedSocket = serverSocket.Accept();
 
                     IPEndPoint clientEndPoint = acceptedSocket.RemoteEndPoint as IPEndPoint;
-                    Console.WriteLine($"Povezao se novi klijent! Njegova adresa: {clientEndPoint}");
+                    Console.WriteLine($"\nPovezao se novi klijent!");
+                    Console.WriteLine($"IP adresa:{clientEndPoint.Address,-10}");
+                    Console.WriteLine($"Port:{clientEndPoint.Port,-10}");
                     #endregion
 
                     #region Komunikacija
@@ -122,33 +123,33 @@ namespace Server
 
                             if (numOfBytes == 0)
                             {
-                                Console.WriteLine("Klijent je zavrsio sa radom");
+                                Console.WriteLine("\nKlijent je zavrsio sa radom");
                                 break;
                             }
 
                             string message = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                            Console.WriteLine($"Poruka od {clientEndPoint}: {message}");
+                            Console.WriteLine($"\nPoruka od {clientEndPoint}: {message}");
 
                             if (message.ToLower() == "kraj")
                             {
-                                Console.WriteLine("Prekinuta komunikacija sa klijentom.");
+                                Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
                                 break;
                             }
 
-                            Console.Write("\nUnesite poruku: ");
+                            Console.Write("\nUnesi poruku: ");
                             string response = Console.ReadLine();
 
                             numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(response));
 
                             if (response.ToLower() == "kraj")
                             {
-                                Console.WriteLine("Prekinuta komunikacija sa klijentom.");
+                                Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
                                 break;
                             }
                         }
                         catch (SocketException ex)
                         {
-                            Console.WriteLine($"Doslo je do greske: {ex}");
+                            Console.WriteLine($"\nDoslo je do greske prilikom prijema poruke! \n{ex}");
                             break;
                         }
                     }
@@ -169,11 +170,19 @@ namespace Server
                 Console.WriteLine("\nDa li zelite ponovo da uspostavite komunikaciju sa klijentom? (da/ne)");
                 string answer = Console.ReadLine().Trim().ToLower();
 
+                while (answer != "da" && answer != "ne")
+                {
+                    Console.Write("\nGRESKA! Unesite samo 'da' ili 'ne': ");
+                    answer = Console.ReadLine().Trim().ToLower();
+                }
+
                 if (answer == "ne")
                 {
                     Console.WriteLine("\nServer zavrsava sa radom.");
                     break;
                 }
+
+                Console.Clear();
 
                 #endregion
 
@@ -183,12 +192,12 @@ namespace Server
         #region Provera unosa
         static string CheckValidInput()
         {
-            Console.Write("Unesite zeljeni protocol za rad Servera (TCP ili UDP): ");
+            Console.Write("Unesite protokol za rad servera (TCP ili UDP): ");
             string input = Console.ReadLine().Trim().ToUpper();
 
             while (input != "UDP" && input != "TCP")
             {
-                Console.Write("\nGRESKA! Unesite zeljeni protocol za rad Servera (TCP ili UDP): ");
+                Console.Write("\nGRESKA! Unesite protokol za rad servera (TCP ili UDP):  ");
                 input = Console.ReadLine().Trim().ToUpper();
             }
             return input;

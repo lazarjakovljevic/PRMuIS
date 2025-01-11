@@ -12,13 +12,19 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            #region Inicijalizacija i povezivanje
+            #region Odabir protokola
 
             string protocol = CheckValidInput();
             Console.WriteLine($"Izabrali ste protocol: {protocol}");
 
-            if(protocol == "UDP")
+            #endregion
+
+            #region UDP
+
+            if (protocol == "UDP")
             {
+                #region Inicijalizacija i povezivanje
+
                 Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
                 IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50001);
                 serverSocket.Bind(serverEP);
@@ -26,6 +32,11 @@ namespace Server
                 Console.WriteLine($"Server je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
 
                 EndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+
+                #endregion
+
+                #region Komunikacija
+
                 byte[] buffer = new byte[1024];
                 while (true)
                 {
@@ -37,7 +48,7 @@ namespace Server
 
                         if (message.ToLower() == "kraj") break;
 
-                        string response = $"Server odgovor, poruka: {message} mora biti kriptovana"; //ubaciti kript
+                        string response = $"Server response, message: {message} mora biti kriptovana"; //ubaciti kript
                         byte[] responseBytes = Encoding.UTF8.GetBytes(response);
                         serverSocket.SendTo(responseBytes, clientEndPoint);
                     }
@@ -46,6 +57,9 @@ namespace Server
                         Console.WriteLine($"Doslo je do greske tokom prijema poruke: \n{ex}");
                     }
                 }
+
+                #endregion
+
                 #region Zatvaranje
 
                 serverSocket.Close();
@@ -54,9 +68,75 @@ namespace Server
 
                 #endregion
             }
+
+            #endregion
+
+            #region TCP
+
             else if(protocol == "TCP")
             {
-               //TODO
+                #region Inicijalizacija i povezivanje
+
+                Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
+                IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50001);
+
+                serverSocket.Bind(serverEP);
+
+                serverSocket.Listen(2);
+
+                Console.WriteLine($"Server je stavljen u stanje osluskivanja i ocekuje komunikaciju na {serverEP}");
+
+                Socket acceptedSocket = serverSocket.Accept();
+
+                IPEndPoint clientEP = acceptedSocket.RemoteEndPoint as IPEndPoint;
+                Console.WriteLine($"Povezao se novi klijent! Njegova adresa: {clientEP}");
+                #endregion
+
+                #region Komunikacija
+                byte[] buffer = new byte[1024];
+
+                while (true)
+                {
+                    try
+                    {
+                        int numOfBytes = acceptedSocket.Receive(buffer);
+                        if (numOfBytes == 0)
+                        {
+                            Console.WriteLine("Klijent je zavrsio sa radom");
+                            break;
+                        }
+                        string message = Encoding.UTF8.GetString(buffer);
+                        Console.WriteLine(message);
+
+
+                        if (message == "kraj")
+                            break;
+
+
+                        Console.Write("\nUnesite poruku: ");
+                        string response = Console.ReadLine();
+
+                        numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(response));
+                        if (response == "kraj")
+                            break;
+                    }
+                    catch (SocketException ex)
+                    {
+                        Console.WriteLine($"Doslo je do greske: {ex}");
+                        break;
+                    }
+                }
+                #endregion
+
+                #region Zatvaranje
+
+                Console.WriteLine("Server zavrsava sa radom");
+                Console.ReadKey();
+                acceptedSocket.Close();
+                serverSocket.Close();
+
+                #endregion
             }
 
             #endregion
@@ -77,6 +157,5 @@ namespace Server
             return input;
         }
         #endregion
-
     }
 }

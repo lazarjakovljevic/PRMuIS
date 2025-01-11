@@ -63,6 +63,12 @@ namespace Server
 
                             byte[] responseBytes = Encoding.UTF8.GetBytes(response);
                             serverSocket.SendTo(responseBytes, clientEndPoint);
+
+                            if (response.ToLower() == "kraj")
+                            {
+                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                break;
+                            }
                         }
 
                         catch (SocketException ex)

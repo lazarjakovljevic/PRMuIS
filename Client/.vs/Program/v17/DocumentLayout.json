@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "D:\\FAKS\\MREZE\\Project\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|D:\\FAKS\\MREZE\\Project\\Client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|solutionrelative:client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\homophonic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\homophonic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|D:\\FAKS\\MREZE\\Project\\Client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|solutionrelative:client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{610D3154-D603-44CF-BAC7-7D50735186C6}|..\\Server\\Server.csproj|d:\\faks\\mreze\\project\\server\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\vignere.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,11 +26,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Vignere.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Vignere.cs",
               "RelativeDocumentMoniker": "..\\Algorithms\\Vignere.cs",
@@ -43,7 +43,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "Bitwise.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
               "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
@@ -56,33 +56,33 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "Homophonic.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
               "RelativeDocumentMoniker": "..\\Algorithms\\Homophonic.cs",
               "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
               "RelativeToolTip": "..\\Algorithms\\Homophonic.cs",
-              "ViewState": "AgIAAAUAAAAAAAAAAAAxwA8AAAAiAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAIwDwAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T17:21:55.553Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Client.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
               "RelativeDocumentMoniker": "Client.cs",
               "ToolTip": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
               "RelativeToolTip": "Client.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAgwDIAAABaAAAAAAAAAA==",
+              "ViewState": "AgIAACgAAAAAAAAAAAAgwDIAAABaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T12:41:59.678Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs",
               "RelativeDocumentMoniker": "..\\Server\\Server.cs",

@@ -25,28 +25,44 @@ namespace Algorithms
         public void GenerateKeys()
         {
             int start = rand.Next(10, 100); // broj izmedju 10 i 100
-
+            
             for (int i = 0; i < ALPHABET_LENGTH; i++)
             {
                 primaryKey[i] = start;
+              
+                if (IsVowel((char)('A' + i)))
+                {
+                    secondaryKey[i] = (rand.Next(2) == 0) ? start : (start - 1);
+                }
+                else
+                {
+                    secondaryKey[i] = -1; 
+                }
+
+                secondaryKey[i] = IsVowel((char)('A' + i)) ? (start - 1) : -1;
+
                 start -= 2;
 
                 if (start < 10)
                     start = 99;
-
-                secondaryKey[i] = IsVowel((char)('A' + i)) ? (start - 1) : -1;
             }
         }
 
         public string Encrypt(string message)
-        {    
+        {
             string cryptoMessage = string.Empty;
+            bool previousWasLetter = false;
 
             foreach (char c in message)
             {
                 if (!char.IsLetter(c))
                 {
-                    cryptoMessage += c; 
+                    if (previousWasLetter)
+                    {
+                        cryptoMessage = cryptoMessage.TrimEnd();
+                    }
+                    cryptoMessage += c;
+                    previousWasLetter = false;
                     continue;
                 }
 
@@ -60,7 +76,13 @@ namespace Algorithms
                     chosenKey = secondaryKey[index];
                 }
 
-                cryptoMessage += chosenKey.ToString() + " ";
+                if (previousWasLetter)
+                {
+                    cryptoMessage += " ";
+                }
+
+                cryptoMessage += chosenKey.ToString();
+                previousWasLetter = true;
             }
 
             return cryptoMessage;

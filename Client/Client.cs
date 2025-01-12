@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Algorithms;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -43,7 +44,11 @@ namespace Client
                                 continue;
 
                             
-                            //ubaciti kriptovanje
+                            Homophonic homophonic = new Homophonic();
+    
+                            string encryptedMessage = homophonic.Encrypt(message);
+
+                            Console.WriteLine($"Enkriptovana poruka: {encryptedMessage}");
 
                             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
                             clientSocket.SendTo(messageBytes, serverEndPoint);

@@ -12,3 +12,6 @@ D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.AssemblyReference.cache
 D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
 D:\FAKS\MREZE\Project\Server\obj\Debug\Server.exe
 D:\FAKS\MREZE\Project\Server\obj\Debug\Server.pdb
+D:\FAKS\MREZE\Project\Server\bin\Debug\Algorithms.dll
+D:\FAKS\MREZE\Project\Server\bin\Debug\Algorithms.pdb
+D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.Up2Date

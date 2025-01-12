@@ -1,0 +1,6 @@
+D:\FAKS\MREZE\Project\Algorithms\bin\Debug\Algorithms.dll
+D:\FAKS\MREZE\Project\Algorithms\bin\Debug\Algorithms.pdb
+D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.csproj.AssemblyReference.cache
+D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
+D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.dll
+D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.pdb

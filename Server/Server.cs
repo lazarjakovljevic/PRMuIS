@@ -1,6 +1,7 @@
 ﻿using Algorithms;
 using Communication;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -35,7 +36,7 @@ namespace Server
 
                     serverSocket.Bind(serverEP);
 
-                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
+                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"\n");
 
                     #endregion
 
@@ -43,6 +44,7 @@ namespace Server
 
                     byte[] buffer = new byte[1024];
                     BinaryFormatter formatter = new BinaryFormatter();
+                    List<NacinKomunikacije> komunikacije = new List<NacinKomunikacije>();
                     while (true)
                     {
                         try
@@ -76,39 +78,45 @@ namespace Server
                             using (MemoryStream ms = new MemoryStream(objectBytes))
                             {
                                 nacin = (NacinKomunikacije)formatter.Deserialize(ms);
+                                nacin.ClientEndPoint = clientEndPoint;
+                                komunikacije.Add(nacin);
                             }
 
                             string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
                             Console.WriteLine($"Primljena enkriptovana poruka: {encryptedMessage}");
+                            Console.WriteLine($"Adresa posiljaoca: {nacin.ClientEndPoint}");
                             Console.WriteLine($"Algoritam: {nacin.Algorithm}");
-                            Console.WriteLine($"Korisceni kljuc: {nacin.UsedKey}");
+                            Console.WriteLine($"Korisceni kljucevi: \n{nacin.UsedKey}");
 
-                            Homophonic homophonic = new Homophonic();
-                            string decryptedMessage = homophonic.Decrypt(encryptedMessage);
-                            Console.WriteLine($"\nPoruka od \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
+                            PrintCommunicationList(komunikacije);
 
-                            if (decryptedMessage.ToLower() == "kraj")
+                            //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
+                            if (nacin.Algorithm == "HOMOFONO")
                             {
-                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                break;
-                            }
+                                Homophonic homophonic = new Homophonic();
+                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
 
-                            Console.Write("\nUnesi poruku: ");
-                            string response = Console.ReadLine();
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
 
-                            string encryptingMessage = homophonic.Encrypt(response);
-                            //Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
 
-                            byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
-                            serverSocket.SendTo(responseBytes, clientEndPoint);
+                                string encryptingMessage = homophonic.Encrypt(response);
+                                byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                serverSocket.SendTo(responseBytes, clientEndPoint);
 
-                            if (response.ToLower() == "kraj")
-                            {
-                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                break;
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
                             }
                         }
-
                         catch (SocketException ex)
                         {
                             Console.WriteLine($"Doslo je do greske tokom prijema poruke.\n{ex}");
@@ -230,6 +238,41 @@ namespace Server
 
             }
         }
+        #region Ispis liste komunikacija
+        public static void PrintCommunicationList(List<NacinKomunikacije> komunikacije)
+        {
+            Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+                "Client EndPoint", "Algorithm", "Used Key");
+            Console.WriteLine(new string('-', 95));
+
+            foreach (var komunikacija in komunikacije)
+            {
+                string clientEndpoint = komunikacija.ClientEndPoint.ToString();
+                string algorithm = komunikacija.Algorithm;
+                string usedKey = komunikacija.UsedKey;
+
+                if (usedKey.Contains("~ Sekundarni kljuc: "))
+                {
+                    var parts = usedKey.Split(new[] { "~ Sekundarni kljuc: " }, StringSplitOptions.None);
+                    string primaryKey = parts[0].Trim();
+                    string secondaryKey = parts.Length > 1 ? parts[1].Trim() : "";
+
+                    Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+                        clientEndpoint, algorithm, primaryKey);
+
+                    Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+                        "", "", "~ Sekundarni kljuc: " + secondaryKey);
+                }
+                else
+                {
+                    Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+                        clientEndpoint, algorithm, usedKey);
+                }
+            }
+
+        }
+
+        #endregion
 
         #region Provera unosa
         static string CheckValidInputProtocol()

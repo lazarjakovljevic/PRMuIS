@@ -23,9 +23,12 @@ namespace Algorithms
             return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
         }
 
-        public (int[] PrimaryKey, int[] SecondaryKey) GetKeys()
+        public string GetKeyAsString()
         {
-            return (primaryKey, secondaryKey);
+            StringBuilder keyBuilder = new StringBuilder();
+            keyBuilder.AppendLine("~ Primarni kljuc: " + string.Join(", ", primaryKey));
+            keyBuilder.AppendLine("~ Sekundarni kljuc: " + string.Join(", ", secondaryKey));
+            return keyBuilder.ToString();
         }
 
         public void GenerateKeys()

@@ -55,10 +55,7 @@ namespace Client
                                 Homophonic homophonic = new Homophonic();
                                 string encryptingMessage = homophonic.Encrypt(message);
 
-                                int[] primaryKey;
-                                int[] secondaryKey;
-                                (primaryKey, secondaryKey) = homophonic.GetKeys();
-                                string key = primaryKey.ToString() + "*" + secondaryKey.ToString();
+                                string key = homophonic.GetKeyAsString();
                                 NacinKomunikacije nacin = new NacinKomunikacije(algorithm, key);
 
                                 byte[] objectBytes;
@@ -87,9 +84,9 @@ namespace Client
                                 int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
 
                                 string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
-                                Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
                                 string decryptedMessage = homophonic.Decrypt(encryptedMessage);
-                                Console.WriteLine($"Poruka od servera: {decryptedMessage.ToLower()}");
+                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage.ToLower()}");
 
                                 if (decryptedMessage.ToLower() == "kraj")
                                 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace Algorithms
 {
@@ -11,7 +12,7 @@ namespace Algorithms
         private int[] secondaryKey = new int[ALPHABET_LENGTH];
         private Random rand = new Random();
 
-        public Homophonic() 
+        public Homophonic()
         {
             rand = new Random(42);
             GenerateKeys();
@@ -22,21 +23,26 @@ namespace Algorithms
             return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
         }
 
+        public (int[] PrimaryKey, int[] SecondaryKey) GetKeys()
+        {
+            return (primaryKey, secondaryKey);
+        }
+
         public void GenerateKeys()
         {
-            int start = rand.Next(10, 100); // broj izmedju 10 i 100
-            
+            int start = rand.Next(10, 100);
+
             for (int i = 0; i < ALPHABET_LENGTH; i++)
             {
                 primaryKey[i] = start;
-              
+
                 if (IsVowel((char)('A' + i)))
                 {
                     secondaryKey[i] = (rand.Next(2) == 0) ? start : (start - 1);
                 }
                 else
                 {
-                    secondaryKey[i] = -1; 
+                    secondaryKey[i] = -1;
                 }
 
                 secondaryKey[i] = IsVowel((char)('A' + i)) ? (start - 1) : -1;
@@ -51,21 +57,14 @@ namespace Algorithms
         public string Encrypt(string message)
         {
             string cryptoMessage = string.Empty;
-            bool previousWasLetter = false;
 
             foreach (char c in message)
             {
-                if (!char.IsLetter(c))
+                if(!char.IsLetter(c))
                 {
-                    if (previousWasLetter)
-                    {
-                        cryptoMessage = cryptoMessage.TrimEnd();
-                    }
                     cryptoMessage += c;
-                    previousWasLetter = false;
                     continue;
                 }
-
                 char upperChar = char.ToUpper(c);
                 int index = upperChar - 'A';
 
@@ -76,16 +75,54 @@ namespace Algorithms
                     chosenKey = secondaryKey[index];
                 }
 
-                if (previousWasLetter)
-                {
-                    cryptoMessage += " ";
-                }
-
-                cryptoMessage += chosenKey.ToString();
-                previousWasLetter = true;
+                cryptoMessage += chosenKey.ToString() + " ";
             }
 
             return cryptoMessage;
         }
-    } 
+
+        public string Decrypt(string encryptedMessage)
+        {
+            StringBuilder decryptedMessage = new StringBuilder();
+            string[] encryptedParts = encryptedMessage.Split(' '); // Razdvajamo šifrovane delove po razmacima
+
+            foreach (string part in encryptedParts)
+            {
+                if (string.IsNullOrWhiteSpace(part))
+                {
+                    decryptedMessage.Append(' '); // Ako je razmak, dodaj ga direktno
+                    continue;
+                }
+
+                if (int.TryParse(part, out int number))
+                {
+                    // Pronađi odgovarajuće slovo
+                    char decryptedChar = '\0';
+                    for (int i = 0; i < ALPHABET_LENGTH; i++)
+                    {
+                        if (primaryKey[i] == number || secondaryKey[i] == number)
+                        {
+                            decryptedChar = (char)('A' + i);
+                            break;
+                        }
+                    }
+
+                    // Dodaj dekriptovano slovo u rezultat
+                    if (decryptedChar != '\0')
+                    {
+                        decryptedMessage.Append(decryptedChar);
+                    }
+                }
+                else
+                {
+                    // Ako nije broj (npr. interpunkcija), dodaj direktno u rezultat
+                    decryptedMessage.Append(part);
+                }
+            }
+
+            return decryptedMessage.ToString();
+        }
+
+
+    }
 }

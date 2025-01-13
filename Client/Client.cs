@@ -1,7 +1,10 @@
 ﻿using Algorithms;
+using Communication;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Client
@@ -12,11 +15,13 @@ namespace Client
         {
             while (true)
             {
-                #region Odabir protokola
+                #region Odabir protokola i algoritma
 
-                string protocol = CheckValidInput();
+                string protocol = CheckValidInputProtocol();
                 Console.WriteLine($"Izabrani protokol: {protocol}");
 
+                string algorithm = CheckValidInputAlgorithm();
+                Console.WriteLine($"Izabrani algoritam: {algorithm}\n");
                 #endregion
 
                 #region UDP
@@ -32,50 +37,71 @@ namespace Client
                     #endregion
 
                     #region Komunikacija
-
-                    while (true)
+                    if (algorithm == "HOMOFONO")
                     {
-                        try
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        while (true)
                         {
-                            Console.Write("Unesite poruku ('kraj' za izlaz): ");
-                            string message = Console.ReadLine();
-
-                            if (string.IsNullOrWhiteSpace(message))
-                                continue;
-
-                            
-                            Homophonic homophonic = new Homophonic();
-    
-                            string encryptedMessage = homophonic.Encrypt(message);
-
-                            Console.WriteLine($"Enkriptovana poruka: {encryptedMessage}");
-
-                            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-                            clientSocket.SendTo(messageBytes, serverEndPoint);
-
-
-                            if (message.ToLower() == "kraj")
+                            try
                             {
-                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
+
+                                Console.Write("Unesite poruku ('kraj' za izlaz): ");
+                                string message = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(message))
+                                    continue;
+
+
+                                Homophonic homophonic = new Homophonic();
+                                string encryptingMessage = homophonic.Encrypt(message);
+
+                                int[] primaryKey;
+                                int[] secondaryKey;
+                                (primaryKey, secondaryKey) = homophonic.GetKeys();
+                                string key = primaryKey.ToString() + "*" + secondaryKey.ToString();
+                                NacinKomunikacije nacin = new NacinKomunikacije(algorithm, key);
+
+                                byte[] objectBytes;
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    formatter.Serialize(ms, nacin);
+                                    objectBytes = ms.ToArray();
+                                }
+
+                                byte[] messageBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                byte[] dataToSend = new byte[objectBytes.Length + messageBytes.Length + 1];
+                                Array.Copy(objectBytes, 0, dataToSend, 0, objectBytes.Length);
+                                dataToSend[objectBytes.Length] = (byte)'|'; // Separator
+                                Array.Copy(messageBytes, 0, dataToSend, objectBytes.Length + 1, messageBytes.Length);
+
+                                clientSocket.SendTo(dataToSend, serverEndPoint);
+
+
+                                if (message.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                byte[] buffer = new byte[1024];
+                                int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
+
+                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
+                                Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                Console.WriteLine($"Poruka od servera: {decryptedMessage.ToLower()}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            catch (SocketException ex)
+                            {
+                                Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n\n{ex}");
                                 break;
                             }
-
-                            byte[] buffer = new byte[1024];
-                            int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
-
-                            string response = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
-                            Console.WriteLine($"Poruka od servera: {response}");
-
-                            if (response.ToLower() == "kraj")
-                            {
-                                Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                break;
-                            }
-                        }
-                        catch (SocketException ex)
-                        {
-                            Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n\n{ex}");
-                            break;
                         }
                     }
 
@@ -127,7 +153,12 @@ namespace Client
                             if (string.IsNullOrWhiteSpace(message))
                                 continue;
 
-                            int numOfBytes = clientSocket.Send(Encoding.UTF8.GetBytes(message));
+
+                            Homophonic homophonic = new Homophonic();
+                            string encryptedMessage = homophonic.Encrypt(message);
+                            Console.WriteLine($"Enkriptovana poruka: {encryptedMessage}");
+
+                            int numOfBytes = clientSocket.Send(Encoding.UTF8.GetBytes(encryptedMessage));
                             numOfBytes = clientSocket.Receive(buffer);
 
                             if (message.ToLower() == "kraj")
@@ -142,8 +173,9 @@ namespace Client
                                 break;
                             }
 
-                            string response = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                            Console.WriteLine($"Poruka od servera: {response}");
+                            string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                            string response = homophonic.Decrypt(decryptedMessage);
+                            Console.WriteLine($"Poruka od servera: {response.ToLower()}");
 
                             if (response.ToLower() == "kraj")
                             {
@@ -193,7 +225,7 @@ namespace Client
         }
 
         #region Provera unosa
-        static string CheckValidInput()
+        static string CheckValidInputProtocol()
         {
             Console.Write("Unesite protokol za rad servera (TCP ili UDP): ");
             string input = Console.ReadLine().Trim().ToUpper();
@@ -201,6 +233,18 @@ namespace Client
             while (input != "UDP" && input != "TCP")
             {
                 Console.Write("\nGRESKA! Unesite protokol za rad servera (TCP ili UDP): ");
+                input = Console.ReadLine().Trim().ToUpper();
+            }
+            return input;
+        }
+        static string CheckValidInputAlgorithm()
+        {
+            Console.Write("Unesite algoritam za enkripciju poruke (za sad samo Homofono): ");
+            string input = Console.ReadLine().Trim().ToUpper();
+
+            while (input != "HOMOFONO")
+            {
+                Console.Write("\nGRESKA! Unesite algoritam za enkripciju poruke (za sad samo Homofono): ");
                 input = Console.ReadLine().Trim().ToUpper();
             }
             return input;

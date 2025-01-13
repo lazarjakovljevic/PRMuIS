@@ -15,3 +15,15 @@ D:\FAKS\MREZE\Project\Server\obj\Debug\Server.pdb
 D:\FAKS\MREZE\Project\Server\bin\Debug\Algorithms.dll
 D:\FAKS\MREZE\Project\Server\bin\Debug\Algorithms.pdb
 D:\FAKS\MREZE\Project\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Server.exe.config
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Server.exe
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Server.pdb
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Algorithms.dll
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Algorithms.pdb
+C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.csproj.Up2Date
+C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.exe
+C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.pdb
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.dll
+C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.pdb

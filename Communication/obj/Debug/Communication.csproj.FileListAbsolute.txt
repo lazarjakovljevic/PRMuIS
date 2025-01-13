@@ -1,0 +1,6 @@
+C:\Users\User\Desktop\Mreze Projekat\Communication\bin\Debug\Communication.dll
+C:\Users\User\Desktop\Mreze Projekat\Communication\bin\Debug\Communication.pdb
+C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.dll
+C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.pdb

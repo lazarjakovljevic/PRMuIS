@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Algorithms;
+using Communication;
+using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
 namespace Server
@@ -13,7 +18,7 @@ namespace Server
             {
                 #region Odabir protokola
 
-                string protocol = CheckValidInput();
+                string protocol = CheckValidInputProtocol();
                 Console.WriteLine($"Izabrani protokol: {protocol}");
 
                 #endregion
@@ -37,11 +42,11 @@ namespace Server
                     #region Komunikacija
 
                     byte[] buffer = new byte[1024];
-
+                    BinaryFormatter formatter = new BinaryFormatter();
                     while (true)
                     {
                         try
-                        {   
+                        {
                             int numOfBytes = serverSocket.ReceiveFrom(buffer, ref clientEndPoint);
 
                             if (numOfBytes == 0)
@@ -50,10 +55,39 @@ namespace Server
                                 break;
                             }
 
-                            string message = Encoding.UTF8.GetString(buffer, 0, numOfBytes).Trim(); //ubaciti dekript
-                            Console.WriteLine($"\nPoruka od \"{clientEndPoint}\": {message}");
+                            int separatorIndex = Array.IndexOf(buffer, (byte)'|');
+                            if (separatorIndex == -1)
+                            {
+                                Console.WriteLine("Greška: Separator nije pronađen.");
+                                continue;
+                            }
 
-                            if (message.ToLower() == "kraj")
+                            // Bajtovi za objekat
+                            byte[] objectBytes = new byte[separatorIndex];
+                            Array.Copy(buffer, 0, objectBytes, 0, separatorIndex);
+
+                            // Bajtovi za poruku
+                            int messageLength = numOfBytes - separatorIndex - 1;
+                            byte[] messageBytes = new byte[messageLength];
+                            Array.Copy(buffer, separatorIndex + 1, messageBytes, 0, messageLength);
+
+                            // Deserijalizacija objekta
+                            NacinKomunikacije nacin;
+                            using (MemoryStream ms = new MemoryStream(objectBytes))
+                            {
+                                nacin = (NacinKomunikacije)formatter.Deserialize(ms);
+                            }
+
+                            string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
+                            Console.WriteLine($"Primljena enkriptovana poruka: {encryptedMessage}");
+                            Console.WriteLine($"Algoritam: {nacin.Algorithm}");
+                            Console.WriteLine($"Korisceni kljuc: {nacin.UsedKey}");
+
+                            Homophonic homophonic = new Homophonic();
+                            string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                            Console.WriteLine($"\nPoruka od \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
+
+                            if (decryptedMessage.ToLower() == "kraj")
                             {
                                 Console.WriteLine("Prekinuta komunikacija sa serverom.");
                                 break;
@@ -62,7 +96,10 @@ namespace Server
                             Console.Write("\nUnesi poruku: ");
                             string response = Console.ReadLine();
 
-                            byte[] responseBytes = Encoding.UTF8.GetBytes(response);
+                            string encryptingMessage = homophonic.Encrypt(response);
+                            //Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+
+                            byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
                             serverSocket.SendTo(responseBytes, clientEndPoint);
 
                             if (response.ToLower() == "kraj")
@@ -127,8 +164,10 @@ namespace Server
                                 break;
                             }
 
-                            string message = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                            Console.WriteLine($"\nPoruka od {clientEndPoint}: {message}");
+                            Homophonic homophonic = new Homophonic();
+                            string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                            string message = homophonic.Decrypt(decryptedMessage);
+                            Console.WriteLine($"\nPoruka od {clientEndPoint}: {message.ToLower()}");
 
                             if (message.ToLower() == "kraj")
                             {
@@ -139,7 +178,10 @@ namespace Server
                             Console.Write("\nUnesi poruku: ");
                             string response = Console.ReadLine();
 
-                            numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(response));
+                            string encryptedMessage = homophonic.Encrypt(response);
+                            Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+
+                            numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptedMessage));
 
                             if (response.ToLower() == "kraj")
                             {
@@ -190,7 +232,7 @@ namespace Server
         }
 
         #region Provera unosa
-        static string CheckValidInput()
+        static string CheckValidInputProtocol()
         {
             Console.Write("Unesite protokol za rad servera (TCP ili UDP): ");
             string input = Console.ReadLine().Trim().ToUpper();
@@ -202,6 +244,7 @@ namespace Server
             }
             return input;
         }
+      
         #endregion
     }
 }

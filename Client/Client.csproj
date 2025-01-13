@@ -54,6 +54,10 @@
       <Project>{86402258-774d-4a38-bccd-fe89fcd47d8e}</Project>
       <Name>Algorithms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Communication\Communication.csproj">
+      <Project>{082b2001-7261-4a32-a92a-05ae8086ef23}</Project>
+      <Name>Communication</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

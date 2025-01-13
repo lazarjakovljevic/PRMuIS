@@ -4,3 +4,9 @@ D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.csproj.AssemblyReference.c
 D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
 D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.dll
 D:\FAKS\MREZE\Project\Algorithms\obj\Debug\Algorithms.pdb
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\bin\Debug\Algorithms.dll
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\bin\Debug\Algorithms.pdb
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.dll
+C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.pdb

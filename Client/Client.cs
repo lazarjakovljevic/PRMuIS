@@ -210,6 +210,9 @@ namespace Client
                     #endregion
 
                     #region Komunikacija
+
+                    #region Homofono sifrovanje
+
                     if (algorithm == "HOMOFONO")
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
@@ -276,6 +279,79 @@ namespace Client
                             }
                         }
                     }
+
+                    #endregion
+
+                    #region Sifrovanje upotrebom bitova
+
+                    if (algorithm == "BITOVI")
+                    {
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        while (true)
+                        {
+                            try
+                            {
+                                Console.Write("\nUnesite poruku ('kraj' za izlaz): ");
+                                string message = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(message))
+                                    continue;
+
+
+                                Bitwise bitwise = new Bitwise();    
+                                string encryptingMessage = bitwise.Encrypt(message);
+
+                                string key = bitwise.Key;
+                                NacinKomunikacije nacin = new NacinKomunikacije(algorithm, key);
+
+                                byte[] objectBytes;
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    formatter.Serialize(ms, nacin);
+                                    objectBytes = ms.ToArray();
+                                }
+
+                                byte[] messageBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                byte[] dataToSend = new byte[objectBytes.Length + messageBytes.Length + 1];
+                                Array.Copy(objectBytes, 0, dataToSend, 0, objectBytes.Length);
+                                dataToSend[objectBytes.Length] = (byte)'|'; // Separator
+                                Array.Copy(messageBytes, 0, dataToSend, objectBytes.Length + 1, messageBytes.Length);
+
+                                int numOfBytes = clientSocket.Send(dataToSend);
+                                numOfBytes = clientSocket.Receive(buffer);
+
+                                if (message.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                if (numOfBytes == 0)
+                                {
+                                    Console.WriteLine("\nServer je zavrsio sa radom");
+                                    break;
+                                }
+
+                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+                                string decryptedMessage = bitwise.Decrypt(encryptedMessage);
+                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            catch (SocketException ex)
+                            {
+                                Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n{ex}");
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
+
                     #endregion
 
                     #region Zatvaranje uticnice

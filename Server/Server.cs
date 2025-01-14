@@ -236,6 +236,9 @@ namespace Server
                             PrintCommunicationList(communications);
 
                             //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
+
+                            #region Homofono sifrovanje
+
                             if (nacin.Algorithm == "HOMOFONO")
                             {
                                 Homophonic homophonic = new Homophonic();
@@ -261,6 +264,38 @@ namespace Server
                                     break;
                                 }
                             }
+
+                            #endregion
+
+                            #region Sifrovanje upotrebom bitova
+
+                            if (nacin.Algorithm == "BITOVI")
+                            {
+                                Bitwise bitwise = new Bitwise();
+                                //string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                                string decryptedMessage = bitwise.Decrypt(encryptedMessage);
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
+
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
+
+                                string encryptingMessage = bitwise.Encrypt(response);
+                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
+
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
+                            }
+
+                            #endregion
                         }
                         catch (SocketException ex)
                         {

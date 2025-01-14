@@ -187,9 +187,11 @@ namespace Server
                     #endregion
 
                     #region Komunikacija
+
                     byte[] buffer = new byte[1024];
                     BinaryFormatter formatter = new BinaryFormatter();
                     List<NacinKomunikacije> communications = new List<NacinKomunikacije>();
+
                     while (true)
                     {
                         try
@@ -286,6 +288,36 @@ namespace Server
                                 string response = Console.ReadLine();
 
                                 string encryptingMessage = bitwise.Encrypt(response);
+                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
+
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
+                            }
+
+                            #endregion
+
+                            #region Vigenerovo sifrovanje
+
+                            if (nacin.Algorithm == "VIZNER")
+                            {
+                                Vignere vignere = new Vignere();
+             
+                                string decryptedMessage = vignere.Decrypt(encryptedMessage);
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
+
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
+
+                                string encryptingMessage = vignere.Encrypt(response);
                                 numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
 
                                 if (response.ToLower() == "kraj")

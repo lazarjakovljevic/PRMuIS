@@ -3,6 +3,12 @@
   "WorkspaceRootPath": "D:\\FAKS\\MREZE\\Project\\Client\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\vignere.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|d:\\faks\\mreze\\project\\client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|solutionrelative:client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -14,9 +20,6 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{082B2001-7261-4A32-A92A-05AE8086EF23}|..\\Communication\\Communication.csproj|d:\\faks\\mreze\\project\\communication\\nacinkomunikacije.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +29,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,20 +37,46 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Vignere.cs",
+              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Vignere.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Vignere.cs",
+              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Vignere.cs",
+              "RelativeToolTip": "..\\Algorithms\\Vignere.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAmwBgAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T16:27:40.416Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Bitwise.cs",
+              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
+              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
+              "RelativeToolTip": "..\\Algorithms\\Bitwise.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAQwCUAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-11T17:23:53.148Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Server.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs",
               "RelativeDocumentMoniker": "..\\Server\\Server.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs*",
-              "RelativeToolTip": "..\\Server\\Server.cs*",
-              "ViewState": "AgIAAN8AAAAAAAAAAAAuwAwBAAAAAAAAAAAAAA==",
+              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs",
+              "RelativeToolTip": "..\\Server\\Server.cs",
+              "ViewState": "AgIAAKUAAAAAAAAAAAAuwLwAAAAUAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-10T17:07:31.062Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "NacinKomunikacije.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Communication\\NacinKomunikacije.cs",
               "RelativeDocumentMoniker": "..\\Communication\\NacinKomunikacije.cs",
@@ -60,36 +89,25 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Bitwise.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
-              "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
-              "RelativeToolTip": "..\\Algorithms\\Bitwise.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAKAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T17:23:53.148Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
               "Title": "Homophonic.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
               "RelativeDocumentMoniker": "..\\Algorithms\\Homophonic.cs",
               "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
               "RelativeToolTip": "..\\Algorithms\\Homophonic.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowCMAAAAgAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0AAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T17:21:55.553Z"
+              "WhenOpened": "2025-01-11T17:21:55.553Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Client.cs",
               "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
               "RelativeDocumentMoniker": "Client.cs",
               "ToolTip": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
               "RelativeToolTip": "Client.cs",
-              "ViewState": "AgIAAEYBAAAAAAAAAAAuwDkBAABeAAAAAAAAAA==",
+              "ViewState": "AgIAABoAAAAAAAAAAAAuwGQBAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T12:41:59.678Z",
               "EditorCaption": ""

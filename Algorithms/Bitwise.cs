@@ -1,19 +1,23 @@
-﻿using System.Text;
-using System;
-
-namespace Algorithms
+﻿namespace Algorithms
 {
     public class Bitwise
     {
-        private string key;
+        #region Promenljive
 
+        private string key;
         public string Key { get => key; set => key = value; }
 
+        #endregion
+
+        #region Konstruktor
         public Bitwise()
         {
             Key = "LEMON";
         }
 
+        #endregion
+
+        #region Enkripcija
         public string Encrypt(string message)
         {
             string encryptedMessage = string.Empty;
@@ -22,16 +26,16 @@ namespace Algorithms
                 char messageChar = message[i];
                 char keyChar = Key[i % Key.Length];
 
-                // Pretvaranje karaktera u ASCII vrednosti i primena XOR operacije
                 int encryptedChar = messageChar ^ keyChar;
 
-                // Dodavanje šifrovanog karaktera u rezultat
-                encryptedMessage+=((char)encryptedChar);
+                encryptedMessage += ((char)encryptedChar);
             }
             return encryptedMessage.ToString();
         }
 
-        // Metoda za dekripciju
+        #endregion
+
+        #region Dekripcija
         public string Decrypt(string encryptedMessage)
         {
             string decryptedMessage = string.Empty;
@@ -40,14 +44,14 @@ namespace Algorithms
                 char encryptedChar = encryptedMessage[i];
                 char keyChar = Key[i % Key.Length];
 
-                // Primena XOR operacije za vraćanje originalnog karaktera
                 int decryptedChar = encryptedChar ^ keyChar;
 
-                // Dodavanje dešifrovanog karaktera u rezultat
-                decryptedMessage+=((char)decryptedChar);
+                decryptedMessage += ((char)decryptedChar);
             }
+
             return decryptedMessage.ToString();
         }
+
+        #endregion
     }
-    
 }

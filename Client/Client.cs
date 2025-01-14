@@ -172,6 +172,74 @@ namespace Client
                     }
                     #endregion
 
+                    #region Viznerov algoritam
+
+                    if (algorithm == "VIZNER")
+                    {
+                        BinaryFormatter formatter = new BinaryFormatter();
+
+                        while (true)
+                        {
+                            try
+                            {
+                                Console.Write("Unesite poruku ('kraj' za izlaz): ");
+                                string message = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(message))
+                                    continue;
+
+                                Vignere vignere = new Vignere();
+                                string encryptingMessage = vignere.Encrypt(message);
+
+                                string key = vignere.Key;
+                                NacinKomunikacije nacin = new NacinKomunikacije(algorithm, key);
+
+                                byte[] objectBytes;
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    formatter.Serialize(ms, nacin);
+                                    objectBytes = ms.ToArray();
+                                }
+
+                                byte[] messageBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                byte[] dataToSend = new byte[objectBytes.Length + messageBytes.Length + 1];
+                                Array.Copy(objectBytes, 0, dataToSend, 0, objectBytes.Length);
+                                dataToSend[objectBytes.Length] = (byte)'|'; // separator
+                                Array.Copy(messageBytes, 0, dataToSend, objectBytes.Length + 1, messageBytes.Length);
+
+                                clientSocket.SendTo(dataToSend, serverEndPoint);
+
+                                if (message.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                byte[] buffer = new byte[1024];
+                                int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
+
+                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+
+                                string decryptedMessage = vignere.Decrypt(encryptedMessage);
+                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            catch (SocketException ex)
+                            {
+                                Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n\n{ex}");
+                                break;
+                            }
+                        }
+                    }
+                    #endregion
+
+
                     #endregion
 
                     #region Zatvaranje uticnice

@@ -14,6 +14,10 @@ namespace Server
     {
         static void Main(string[] args)
         {
+            int width = 150;
+            int height = 30;
+            Console.SetWindowSize(width, height);
+
             while (true)
             {
                 #region Odabir protokola
@@ -136,6 +140,35 @@ namespace Server
                                 string response = Console.ReadLine();
 
                                 string encryptingMessage = bitwise.Encrypt(response);
+                                byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                serverSocket.SendTo(responseBytes, clientEndPoint);
+
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            #endregion
+
+                            #region Viznerov algoritam
+
+                            if (nacin.Algorithm == "VIZNER")
+                            {
+                                Vignere vignere = new Vignere();
+                                string decryptedMessage = vignere.Decrypt(encryptedMessage).Trim();
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
+
+                                string encryptingMessage = vignere.Encrypt(response);
                                 byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
                                 serverSocket.SendTo(responseBytes, clientEndPoint);
 
@@ -354,9 +387,9 @@ namespace Server
         #region Ispis liste komunikacija
         public static void PrintCommunicationList(List<NacinKomunikacije> communications)
         {
-            Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+            Console.WriteLine("| {0,-25} | {1,-12} | {2,-97} |",
                 "Client EndPoint", "Algorithm", "Used Key");
-            Console.WriteLine(new string('-', 95));
+            Console.WriteLine(new string('-', 143));
 
             foreach (var communication in communications)
             {

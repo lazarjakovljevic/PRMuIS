@@ -1,25 +1,25 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\FAKS\\MREZE\\Project\\Client\\",
+  "WorkspaceRootPath": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Client\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\vignere.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{610D3154-D603-44CF-BAC7-7D50735186C6}|..\\Server\\Server.csproj|c:\\users\\user\\desktop\\mreze projekat\\server\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|d:\\faks\\mreze\\project\\client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|C:\\Users\\User\\Desktop\\Mreze Projekat\\Client\\client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D16F8A20-31DF-450C-9DC4-7819E16723B0}|Client.csproj|solutionrelative:client.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{610D3154-D603-44CF-BAC7-7D50735186C6}|..\\Server\\Server.csproj|d:\\faks\\mreze\\project\\server\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|c:\\users\\user\\desktop\\mreze projekat\\algorithms\\homophonic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|d:\\faks\\mreze\\project\\algorithms\\homophonic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|c:\\users\\user\\desktop\\mreze projekat\\algorithms\\vignere.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{082B2001-7261-4A32-A92A-05AE8086EF23}|..\\Communication\\Communication.csproj|d:\\faks\\mreze\\project\\communication\\nacinkomunikacije.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{082B2001-7261-4A32-A92A-05AE8086EF23}|..\\Communication\\Communication.csproj|c:\\users\\user\\desktop\\mreze projekat\\communication\\nacinkomunikacije.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|c:\\users\\user\\desktop\\mreze projekat\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -29,81 +29,82 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Vignere.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Vignere.cs",
-              "RelativeDocumentMoniker": "..\\Algorithms\\Vignere.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Vignere.cs",
-              "RelativeToolTip": "..\\Algorithms\\Vignere.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAmwBgAAAAeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T16:27:40.416Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Bitwise.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
-              "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Bitwise.cs",
-              "RelativeToolTip": "..\\Algorithms\\Bitwise.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwCUAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T17:23:53.148Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Server.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs",
-              "RelativeDocumentMoniker": "..\\Server\\Server.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Server\\Server.cs",
-              "RelativeToolTip": "..\\Server\\Server.cs",
-              "ViewState": "AgIAAKUAAAAAAAAAAAAuwLwAAAAUAAAAAAAAAA==",
+              "Title": "Vignere.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Vignere.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Vignere.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Vignere.cs",
+              "RelativeToolTip": "..\\Algorithms\\Vignere.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-10T17:07:31.062Z",
+              "WhenOpened": "2025-01-14T16:58:03.281Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "NacinKomunikacije.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Communication\\NacinKomunikacije.cs",
-              "RelativeDocumentMoniker": "..\\Communication\\NacinKomunikacije.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Communication\\NacinKomunikacije.cs",
-              "RelativeToolTip": "..\\Communication\\NacinKomunikacije.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAMAAAAAAAAAA==",
+              "Title": "Bitwise.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Bitwise.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Bitwise.cs",
+              "RelativeToolTip": "..\\Algorithms\\Bitwise.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-14T13:14:40.493Z"
+              "WhenOpened": "2025-01-14T15:03:55.387Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Homophonic.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
-              "RelativeDocumentMoniker": "..\\Algorithms\\Homophonic.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Algorithms\\Homophonic.cs",
-              "RelativeToolTip": "..\\Algorithms\\Homophonic.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD0AAAAIAAAAAAAAAA==",
+              "Title": "NacinKomunikacije.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Communication\\NacinKomunikacije.cs",
+              "RelativeDocumentMoniker": "..\\Communication\\NacinKomunikacije.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Communication\\NacinKomunikacije.cs",
+              "RelativeToolTip": "..\\Communication\\NacinKomunikacije.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-11T17:21:55.553Z",
+              "WhenOpened": "2025-01-13T11:51:28.37Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Homophonic.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Homophonic.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Homophonic.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Homophonic.cs",
+              "RelativeToolTip": "..\\Algorithms\\Homophonic.cs",
+              "ViewState": "AQIAAGgAAAAAAAAAAAAAAFIAAAAkAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-12T15:48:17.794Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Server.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Server\\Server.cs",
+              "RelativeDocumentMoniker": "..\\Server\\Server.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Server\\Server.cs",
+              "RelativeToolTip": "..\\Server\\Server.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-11T15:17:06.424Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Client.cs",
-              "DocumentMoniker": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Client\\Client.cs",
               "RelativeDocumentMoniker": "Client.cs",
-              "ToolTip": "D:\\FAKS\\MREZE\\Project\\Client\\Client.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Client\\Client.cs",
               "RelativeToolTip": "Client.cs",
-              "ViewState": "AgIAABoAAAAAAAAAAAAuwGQBAAAsAAAAAAAAAA==",
+              "ViewState": "AQIAAAQAAAAAAAAAAAAAAN8AAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T12:41:59.678Z",
               "EditorCaption": ""

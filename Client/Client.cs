@@ -147,59 +147,81 @@ namespace Client
                     #endregion
 
                     #region Komunikacija
-                    while (true)
+                    if (algorithm == "HOMOFONO")
                     {
-                        try
+                        BinaryFormatter formatter = new BinaryFormatter();
+                        while (true)
                         {
-                            Console.Write("\nUnesite poruku ('kraj' za izlaz): ");
-                            string message = Console.ReadLine();
-
-                            if (string.IsNullOrWhiteSpace(message))
-                                continue;
-
-                            Homophonic homophonic = new Homophonic();
-                            string encryptedMessage = homophonic.Encrypt(message);
-                            Console.WriteLine($"Enkriptovana poruka: {encryptedMessage}");
-
-                            int numOfBytes = clientSocket.Send(Encoding.UTF8.GetBytes(encryptedMessage));
-                            numOfBytes = clientSocket.Receive(buffer);
-
-                            if (message.ToLower() == "kraj")
+                            try
                             {
-                                Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
+                                Console.Write("\nUnesite poruku ('kraj' za izlaz): ");
+                                string message = Console.ReadLine();
+
+                                if (string.IsNullOrWhiteSpace(message))
+                                    continue;
+
+
+                                Homophonic homophonic = new Homophonic();
+                                string encryptingMessage = homophonic.Encrypt(message);
+
+                                string key = homophonic.GetKeyAsString();
+                                NacinKomunikacije nacin = new NacinKomunikacije(algorithm, key);
+
+                                byte[] objectBytes;
+                                using (MemoryStream ms = new MemoryStream())
+                                {
+                                    formatter.Serialize(ms, nacin);
+                                    objectBytes = ms.ToArray();
+                                }
+
+                                byte[] messageBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                byte[] dataToSend = new byte[objectBytes.Length + messageBytes.Length + 1];
+                                Array.Copy(objectBytes, 0, dataToSend, 0, objectBytes.Length);
+                                dataToSend[objectBytes.Length] = (byte)'|'; // Separator
+                                Array.Copy(messageBytes, 0, dataToSend, objectBytes.Length + 1, messageBytes.Length);
+
+                                int numOfBytes = clientSocket.Send(dataToSend);
+                                numOfBytes = clientSocket.Receive(buffer);
+
+                                if (message.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                if (numOfBytes == 0)
+                                {
+                                    Console.WriteLine("\nServer je zavrsio sa radom");
+                                    break;
+                                }
+
+                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage.ToLower()}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            catch (SocketException ex)
+                            {
+                                Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n{ex}");
                                 break;
                             }
-
-                            if (numOfBytes == 0)
-                            {
-                                Console.WriteLine("\nServer je zavrsio sa radom");
-                                break;
-                            }
-
-                            string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                            string response = homophonic.Decrypt(decryptedMessage);
-                            Console.WriteLine($"Poruka od servera: {response.ToLower()}");
-
-                            if (response.ToLower() == "kraj")
-                            {
-                                Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
-                                break;
-                            }
-                        }
-                        catch (SocketException ex)
-                        {
-                            Console.WriteLine($"Doslo je do greske tokom slanja poruke! \n{ex}");
-                            break;
                         }
                     }
                     #endregion
 
                     #region Zatvaranje uticnice
 
-                    Console.WriteLine("UDP klijent zavrsava sa radom.");
+                    Console.WriteLine("TCP klijent zavrsava sa radom.");
                     clientSocket.Close();
 
                     #endregion
+
                 }
 
                 #endregion

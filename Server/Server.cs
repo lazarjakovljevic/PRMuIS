@@ -89,6 +89,8 @@ namespace Server
                             PrintCommunicationList(communication);
 
                             //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
+                            #region Homofono sifrovanje
+
                             if (nacin.Algorithm == "HOMOFONO")
                             {
                                 Homophonic homophonic = new Homophonic();
@@ -114,13 +116,14 @@ namespace Server
                                     break;
                                 }
                             }
+                            #endregion
+
                         }
                         catch (SocketException ex)
                         {
                             Console.WriteLine($"Doslo je do greske tokom prijema poruke.\n{ex}");
                         }
                     }
-
                     #endregion
 
                     #region Zatvaranje uticnice
@@ -152,12 +155,13 @@ namespace Server
                     IPEndPoint clientEndPoint = acceptedSocket.RemoteEndPoint as IPEndPoint;
                     Console.WriteLine($"\nPovezao se novi klijent!");
                     Console.WriteLine($"IP adresa:{clientEndPoint.Address,-10}");
-                    Console.WriteLine($"Port:{clientEndPoint.Port,-10}");
+                    Console.WriteLine($"Port:{clientEndPoint.Port,-10}\n\n");
                     #endregion
 
                     #region Komunikacija
                     byte[] buffer = new byte[1024];
-
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    List<NacinKomunikacije> communications = new List<NacinKomunikacije>();
                     while (true)
                     {
                         try
@@ -170,29 +174,64 @@ namespace Server
                                 break;
                             }
 
-                            Homophonic homophonic = new Homophonic();
-                            string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                            string message = homophonic.Decrypt(decryptedMessage);
-                            Console.WriteLine($"\nPoruka od {clientEndPoint}: {message.ToLower()}");
-
-                            if (message.ToLower() == "kraj")
+                            int separatorIndex = Array.IndexOf(buffer, (byte)'|');
+                            if (separatorIndex == -1)
                             {
-                                Console.WriteLine("\nPrekinuta communication sa klijentom.");
-                                break;
+                                Console.WriteLine("Greska: Separator nije pronadjen.");
+                                continue;
                             }
 
-                            Console.Write("\nUnesi poruku: ");
-                            string response = Console.ReadLine();
+                            // Bajtovi za objekat
+                            byte[] objectBytes = new byte[separatorIndex];
+                            Array.Copy(buffer, 0, objectBytes, 0, separatorIndex);
 
-                            string encryptedMessage = homophonic.Encrypt(response);
-                            Console.WriteLine($"Enkriptovani odgovor: {encryptedMessage}");
+                            // Bajtovi za poruku
+                            int messageLength = numOfBytes - separatorIndex - 1;
+                            byte[] messageBytes = new byte[messageLength];
+                            Array.Copy(buffer, separatorIndex + 1, messageBytes, 0, messageLength);
 
-                            numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptedMessage));
-
-                            if (response.ToLower() == "kraj")
+                            // Deserijalizacija objekta
+                            NacinKomunikacije nacin;
+                            using (MemoryStream ms = new MemoryStream(objectBytes))
                             {
-                                Console.WriteLine("\nPrekinuta communication sa klijentom.");
-                                break;
+                                nacin = (NacinKomunikacije)formatter.Deserialize(ms);
+                                nacin.ClientEndPoint = clientEndPoint;
+                                communications.Add(nacin);
+                            }
+
+                            string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
+                            Console.WriteLine($"Primljena enkriptovana poruka: {encryptedMessage}");
+                            Console.WriteLine($"Adresa posiljaoca: {nacin.ClientEndPoint}");
+                            Console.WriteLine($"Algoritam: {nacin.Algorithm}");
+                            Console.WriteLine($"Korisceni kljucevi: \n{nacin.UsedKey}");
+
+                            PrintCommunicationList(communications);
+
+                            //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
+                            if (nacin.Algorithm == "HOMOFONO")
+                            {
+                                Homophonic homophonic = new Homophonic();
+                                //string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
+                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
+
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
+
+                                string encryptingMessage = homophonic.Encrypt(response);
+                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
+
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                    break;
+                                }
                             }
                         }
                         catch (SocketException ex)

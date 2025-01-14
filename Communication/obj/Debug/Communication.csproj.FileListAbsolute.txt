@@ -4,3 +4,9 @@ C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.cspro
 C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.csproj.CoreCompileInputs.cache
 C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.dll
 C:\Users\User\Desktop\Mreze Projekat\Communication\obj\Debug\Communication.pdb
+D:\FAKS\MREZE\Project\Communication\bin\Debug\Communication.dll
+D:\FAKS\MREZE\Project\Communication\bin\Debug\Communication.pdb
+D:\FAKS\MREZE\Project\Communication\obj\Debug\Communication.csproj.AssemblyReference.cache
+D:\FAKS\MREZE\Project\Communication\obj\Debug\Communication.csproj.CoreCompileInputs.cache
+D:\FAKS\MREZE\Project\Communication\obj\Debug\Communication.dll
+D:\FAKS\MREZE\Project\Communication\obj\Debug\Communication.pdb

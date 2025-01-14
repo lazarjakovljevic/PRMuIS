@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 
@@ -44,7 +43,8 @@ namespace Server
 
                     byte[] buffer = new byte[1024];
                     BinaryFormatter formatter = new BinaryFormatter();
-                    List<NacinKomunikacije> komunikacije = new List<NacinKomunikacije>();
+                    List<NacinKomunikacije> communication = new List<NacinKomunikacije>();
+
                     while (true)
                     {
                         try
@@ -58,28 +58,26 @@ namespace Server
                             }
 
                             int separatorIndex = Array.IndexOf(buffer, (byte)'|');
+
                             if (separatorIndex == -1)
                             {
-                                Console.WriteLine("Greška: Separator nije pronađen.");
+                                Console.WriteLine("GRESKA: Separator nije pronadjen.");
                                 continue;
                             }
 
-                            // Bajtovi za objekat
                             byte[] objectBytes = new byte[separatorIndex];
                             Array.Copy(buffer, 0, objectBytes, 0, separatorIndex);
 
-                            // Bajtovi za poruku
                             int messageLength = numOfBytes - separatorIndex - 1;
                             byte[] messageBytes = new byte[messageLength];
                             Array.Copy(buffer, separatorIndex + 1, messageBytes, 0, messageLength);
 
-                            // Deserijalizacija objekta
                             NacinKomunikacije nacin;
                             using (MemoryStream ms = new MemoryStream(objectBytes))
                             {
                                 nacin = (NacinKomunikacije)formatter.Deserialize(ms);
                                 nacin.ClientEndPoint = clientEndPoint;
-                                komunikacije.Add(nacin);
+                                communication.Add(nacin);
                             }
 
                             string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
@@ -88,13 +86,13 @@ namespace Server
                             Console.WriteLine($"Algoritam: {nacin.Algorithm}");
                             Console.WriteLine($"Korisceni kljucevi: \n{nacin.UsedKey}");
 
-                            PrintCommunicationList(komunikacije);
+                            PrintCommunicationList(communication);
 
                             //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
                             if (nacin.Algorithm == "HOMOFONO")
                             {
                                 Homophonic homophonic = new Homophonic();
-                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                string decryptedMessage = homophonic.Decrypt(encryptedMessage).Trim();
                                 Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
 
                                 if (decryptedMessage.ToLower() == "kraj")
@@ -179,7 +177,7 @@ namespace Server
 
                             if (message.ToLower() == "kraj")
                             {
-                                Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                Console.WriteLine("\nPrekinuta communication sa klijentom.");
                                 break;
                             }
 
@@ -193,7 +191,7 @@ namespace Server
 
                             if (response.ToLower() == "kraj")
                             {
-                                Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
+                                Console.WriteLine("\nPrekinuta communication sa klijentom.");
                                 break;
                             }
                         }
@@ -215,41 +213,22 @@ namespace Server
                 }
                 #endregion
 
-                #region Ponovna komunikacija
-
-                Console.WriteLine("\nDa li zelite ponovo da uspostavite komunikaciju sa klijentom? (da/ne)");
-                string answer = Console.ReadLine().Trim().ToLower();
-
-                while (answer != "da" && answer != "ne")
-                {
-                    Console.Write("\nGRESKA! Unesite samo 'da' ili 'ne': ");
-                    answer = Console.ReadLine().Trim().ToLower();
-                }
-
-                if (answer == "ne")
-                {
-                    Console.WriteLine("\nServer zavrsava sa radom.");
-                    break;
-                }
-
-                Console.Clear();
-
-                #endregion
+                CheckReconnection();
 
             }
         }
         #region Ispis liste komunikacija
-        public static void PrintCommunicationList(List<NacinKomunikacije> komunikacije)
+        public static void PrintCommunicationList(List<NacinKomunikacije> communications)
         {
             Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
                 "Client EndPoint", "Algorithm", "Used Key");
             Console.WriteLine(new string('-', 95));
 
-            foreach (var komunikacija in komunikacije)
+            foreach (var communication in communications)
             {
-                string clientEndpoint = komunikacija.ClientEndPoint.ToString();
-                string algorithm = komunikacija.Algorithm;
-                string usedKey = komunikacija.UsedKey;
+                string clientEndpoint = communication.ClientEndPoint.ToString();
+                string algorithm = communication.Algorithm;
+                string usedKey = communication.UsedKey;
 
                 if (usedKey.Contains("~ Sekundarni kljuc: "))
                 {
@@ -287,7 +266,26 @@ namespace Server
             }
             return input;
         }
-      
+        static void CheckReconnection()
+        {
+            Console.Write("\nDa li zelite ponovo da uspostavite komunikaciju sa serverom? (da/ne): ");
+            string answer = Console.ReadLine().Trim().ToLower();
+
+            while (answer != "da" && answer != "ne")
+            {
+                Console.Write("\nGRESKA: Unesite samo 'da' ili 'ne': ");
+                answer = Console.ReadLine().Trim().ToLower();
+            }
+
+            if (answer == "ne")
+            {
+                Console.WriteLine("\nKlijent zavrsava sa radom.");
+                Environment.Exit(0);
+            }
+
+            Console.Clear();
+        }
+
         #endregion
     }
 }

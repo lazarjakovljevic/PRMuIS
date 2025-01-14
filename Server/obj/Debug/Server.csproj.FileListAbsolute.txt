@@ -27,3 +27,5 @@ C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.exe
 C:\Users\User\Desktop\Mreze Projekat\Server\obj\Debug\Server.pdb
 C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.dll
 C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.pdb
+D:\FAKS\MREZE\Project\Server\bin\Debug\Communication.dll
+D:\FAKS\MREZE\Project\Server\bin\Debug\Communication.pdb

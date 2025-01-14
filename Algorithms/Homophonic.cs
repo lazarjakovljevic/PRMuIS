@@ -1,36 +1,38 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Algorithms
 {
     public class Homophonic
     {
+        #region Inicijalizacija promenljivih
+
         private const int ALPHABET_LENGTH = 26;
 
         private int[] primaryKey = new int[ALPHABET_LENGTH];
         private int[] secondaryKey = new int[ALPHABET_LENGTH];
         private Random rand = new Random();
+        private int seed = 42;
 
+        #endregion
+
+        #region Konstruktor
         public Homophonic()
         {
-            rand = new Random(42);
+            rand = new Random(seed);
             GenerateKeys();
         }
 
+        #endregion
+
+        #region Provera za samoglasnike
         public static bool IsVowel(char c)
         {
             return c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U';
         }
 
-        public string GetKeyAsString()
-        {
-            StringBuilder keyBuilder = new StringBuilder();
-            keyBuilder.AppendLine("~ Primarni kljuc: " + string.Join(", ", primaryKey));
-            keyBuilder.AppendLine("~ Sekundarni kljuc: " + string.Join(", ", secondaryKey));
-            return keyBuilder.ToString();
-        }
+        #endregion
 
+        #region Generisanje kljuceva
         public void GenerateKeys()
         {
             int start = rand.Next(10, 100);
@@ -41,14 +43,12 @@ namespace Algorithms
 
                 if (IsVowel((char)('A' + i)))
                 {
-                    secondaryKey[i] = (rand.Next(2) == 0) ? start : (start - 1);
+                    secondaryKey[i] = (rand.Next(2) == 0) ? (start -1) : (start - 3);
                 }
                 else
                 {
                     secondaryKey[i] = -1;
                 }
-
-                secondaryKey[i] = IsVowel((char)('A' + i)) ? (start - 1) : -1;
 
                 start -= 2;
 
@@ -57,13 +57,30 @@ namespace Algorithms
             }
         }
 
+        #endregion
+
+        #region Vracanje kljuceva
+        public string GetKeyAsString()
+        {
+            string primaryKeyFormatted = string.Join(" ", primaryKey);
+            string secondaryKeyFormatted = string.Join(" ", secondaryKey);
+
+            string result = $"~ Primarni kljuc:   {primaryKeyFormatted}";
+            result += $"\n~ Sekundarni kljuc: {secondaryKeyFormatted}";
+            return result;
+        }
+
+        #endregion
+
+        #region Enkripcija
+
         public string Encrypt(string message)
         {
             string cryptoMessage = string.Empty;
 
             foreach (char c in message)
             {
-                if(!char.IsLetter(c))
+                if (!char.IsLetter(c))
                 {
                     cryptoMessage += c;
                     continue;
@@ -84,22 +101,25 @@ namespace Algorithms
             return cryptoMessage;
         }
 
+
+        #endregion
+
+        #region Dekripcija
         public string Decrypt(string encryptedMessage)
         {
-            StringBuilder decryptedMessage = new StringBuilder();
-            string[] encryptedParts = encryptedMessage.Split(' '); // Razdvajamo šifrovane delove po razmacima
+            string decryptedMessage = string.Empty;
+            string[] encryptedParts = encryptedMessage.Split(' ');
 
             foreach (string part in encryptedParts)
             {
                 if (string.IsNullOrWhiteSpace(part))
                 {
-                    decryptedMessage.Append(' '); // Ako je razmak, dodaj ga direktno
+                    decryptedMessage += " ";
                     continue;
                 }
 
                 if (int.TryParse(part, out int number))
                 {
-                    // Pronađi odgovarajuće slovo
                     char decryptedChar = '\0';
                     for (int i = 0; i < ALPHABET_LENGTH; i++)
                     {
@@ -110,22 +130,20 @@ namespace Algorithms
                         }
                     }
 
-                    // Dodaj dekriptovano slovo u rezultat
                     if (decryptedChar != '\0')
                     {
-                        decryptedMessage.Append(decryptedChar);
+                        decryptedMessage += decryptedChar;
                     }
                 }
                 else
                 {
-                    // Ako nije broj (npr. interpunkcija), dodaj direktno u rezultat
-                    decryptedMessage.Append(part);
+                    decryptedMessage += part;
                 }
             }
 
-            return decryptedMessage.ToString();
+            return decryptedMessage;
         }
 
-
+        #endregion
     }
 }

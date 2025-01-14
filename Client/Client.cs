@@ -37,20 +37,22 @@ namespace Client
                     #endregion
 
                     #region Komunikacija
+
+                    #region Homofono sifrovanje
+
                     if (algorithm == "HOMOFONO")
                     {
                         BinaryFormatter formatter = new BinaryFormatter();
+
                         while (true)
                         {
                             try
                             {
-
                                 Console.Write("Unesite poruku ('kraj' za izlaz): ");
                                 string message = Console.ReadLine();
 
                                 if (string.IsNullOrWhiteSpace(message))
                                     continue;
-
 
                                 Homophonic homophonic = new Homophonic();
                                 string encryptingMessage = homophonic.Encrypt(message);
@@ -68,11 +70,10 @@ namespace Client
                                 byte[] messageBytes = Encoding.UTF8.GetBytes(encryptingMessage);
                                 byte[] dataToSend = new byte[objectBytes.Length + messageBytes.Length + 1];
                                 Array.Copy(objectBytes, 0, dataToSend, 0, objectBytes.Length);
-                                dataToSend[objectBytes.Length] = (byte)'|'; // Separator
+                                dataToSend[objectBytes.Length] = (byte)'|'; // separator
                                 Array.Copy(messageBytes, 0, dataToSend, objectBytes.Length + 1, messageBytes.Length);
 
                                 clientSocket.SendTo(dataToSend, serverEndPoint);
-
 
                                 if (message.ToLower() == "kraj")
                                 {
@@ -85,6 +86,7 @@ namespace Client
 
                                 string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
                                 Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+
                                 string decryptedMessage = homophonic.Decrypt(encryptedMessage);
                                 Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage.ToLower()}");
 
@@ -101,6 +103,11 @@ namespace Client
                             }
                         }
                     }
+
+
+                    #endregion
+
+
 
                     #endregion
 
@@ -150,7 +157,6 @@ namespace Client
                             if (string.IsNullOrWhiteSpace(message))
                                 continue;
 
-
                             Homophonic homophonic = new Homophonic();
                             string encryptedMessage = homophonic.Encrypt(message);
                             Console.WriteLine($"Enkriptovana poruka: {encryptedMessage}");
@@ -178,7 +184,7 @@ namespace Client
                             {
                                 Console.WriteLine("\nPrekinuta komunikacija sa serverom.");
                                 break;
-                            }                  
+                            }
                         }
                         catch (SocketException ex)
                         {
@@ -198,26 +204,8 @@ namespace Client
 
                 #endregion
 
-                #region Ponovna komunikacija
+                CheckReconnection();
 
-                Console.Write("\nDa li zelite ponovo da uspostavite komunikaciju sa serverom? (da/ne): ");
-                string answer = Console.ReadLine().Trim().ToLower();
-
-                while (answer != "da" && answer != "ne")
-                {
-                    Console.Write("\nGRESKA! Unesite samo 'da' ili 'ne': ");
-                    answer = Console.ReadLine().Trim().ToLower();
-                }
-
-                if (answer == "ne")
-                {
-                    Console.WriteLine("\nKlijent zavrsava sa radom.");
-                    break;
-                }
-
-                Console.Clear();
-
-                #endregion
             }
         }
 
@@ -246,6 +234,27 @@ namespace Client
             }
             return input;
         }
+
+        static void CheckReconnection()
+        {
+            Console.Write("\nDa li zelite ponovo da uspostavite komunikaciju sa serverom? (da/ne): ");
+            string answer = Console.ReadLine().Trim().ToLower();
+
+            while (answer != "da" && answer != "ne")
+            {
+                Console.Write("\nGRESKA: Unesite samo 'da' ili 'ne': ");
+                answer = Console.ReadLine().Trim().ToLower();
+            }
+
+            if (answer == "ne")
+            {
+                Console.WriteLine("\nKlijent zavrsava sa radom.");
+                Environment.Exit(0);
+            }
+
+            Console.Clear();
+        }
+
         #endregion
     }
 }

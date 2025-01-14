@@ -387,7 +387,7 @@ namespace Server
         #region Ispis liste komunikacija
         public static void PrintCommunicationList(List<NacinKomunikacije> communications)
         {
-            Console.WriteLine("| {0,-25} | {1,-12} | {2,-97} |",
+            Console.WriteLine("\n| {0,-25} | {1,-12} | {2,-97} |",
                 "Client EndPoint", "Algorithm", "Used Key");
             Console.WriteLine(new string('-', 143));
 
@@ -411,7 +411,7 @@ namespace Server
                 }
                 else
                 {
-                    Console.WriteLine("| {0,-25} | {1,-12} | {2,-50} |",
+                    Console.WriteLine("| {0,-25} | {1,-12} | {2,-97} |",
                         clientEndpoint, algorithm, usedKey);
                 }
             }

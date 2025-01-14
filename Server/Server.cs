@@ -118,6 +118,34 @@ namespace Server
                             }
                             #endregion
 
+                            #region Sifrovanje upotrebom bitova
+
+                            if (nacin.Algorithm == "BITOVI")
+                            {
+                                Bitwise bitwise = new Bitwise();
+                                string decryptedMessage = bitwise.Decrypt(encryptedMessage).Trim();
+                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
+
+                                if (decryptedMessage.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+
+                                Console.Write("\nUnesite odgovor klijentu: ");
+                                string response = Console.ReadLine();
+
+                                string encryptingMessage = bitwise.Encrypt(response);
+                                byte[] responseBytes = Encoding.UTF8.GetBytes(encryptingMessage);
+                                serverSocket.SendTo(responseBytes, clientEndPoint);
+
+                                if (response.ToLower() == "kraj")
+                                {
+                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                    break;
+                                }
+                            }
+                            #endregion
                         }
                         catch (SocketException ex)
                         {

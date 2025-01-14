@@ -10,7 +10,7 @@ namespace Algorithms
 
         private int[] primaryKey = new int[ALPHABET_LENGTH];
         private int[] secondaryKey = new int[ALPHABET_LENGTH];
-        private Random rand = new Random();
+        private Random rand;
         private int seed = 42;
 
         #endregion

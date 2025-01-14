@@ -14,6 +14,9 @@
     },
     {
       "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|c:\\users\\user\\desktop\\mreze projekat\\algorithms\\homophonic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{86402258-774D-4A38-BCCD-FE89FCD47D8E}|..\\Algorithms\\Algorithms.csproj|c:\\users\\user\\desktop\\mreze projekat\\algorithms\\bitwise.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -23,8 +26,25 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 4,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Bitwise.cs",
+              "DocumentMoniker": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Bitwise.cs",
+              "RelativeDocumentMoniker": "..\\Algorithms\\Bitwise.cs",
+              "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Bitwise.cs",
+              "RelativeToolTip": "..\\Algorithms\\Bitwise.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAZAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-14T15:03:55.387Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Document",
               "DocumentIndex": 2,
@@ -35,7 +55,8 @@
               "RelativeToolTip": "..\\Communication\\NacinKomunikacije.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-13T11:51:28.37Z"
+              "WhenOpened": "2025-01-13T11:51:28.37Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -45,9 +66,10 @@
               "RelativeDocumentMoniker": "..\\Algorithms\\Homophonic.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Algorithms\\Homophonic.cs",
               "RelativeToolTip": "..\\Algorithms\\Homophonic.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAHAAAAA6AAAA",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAAABIAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-12T15:48:17.794Z"
+              "WhenOpened": "2025-01-12T15:48:17.794Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -57,7 +79,7 @@
               "RelativeDocumentMoniker": "..\\Server\\Server.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Server\\Server.cs",
               "RelativeToolTip": "..\\Server\\Server.cs",
-              "ViewState": "AQIAABABAAAAAAAAAAAAACMBAAANAAAA",
+              "ViewState": "AQIAAFUAAAAAAAAAAAAAAH4AAAB9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T15:17:06.424Z",
               "EditorCaption": ""
@@ -70,7 +92,7 @@
               "RelativeDocumentMoniker": "Client.cs",
               "ToolTip": "C:\\Users\\User\\Desktop\\Mreze Projekat\\Client\\Client.cs",
               "RelativeToolTip": "Client.cs",
-              "ViewState": "AQIAALoAAAAAAAAAAAAAAN8AAAAAAAAA",
+              "ViewState": "AQIAAIYAAAAAAAAAAAAAAJ0AAABmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-11T12:41:59.678Z",
               "EditorCaption": ""

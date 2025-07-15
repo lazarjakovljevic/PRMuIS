@@ -383,7 +383,10 @@ namespace Server
                                 clientSockets.Remove(client);
                                 clientEndPoints.Remove(client);
                             }
+                            
                         }
+
+                        
                     }
                     #endregion
 

@@ -233,19 +233,26 @@ namespace Client
                                     break;
                                 }
 
-                                byte[] buffer = new byte[1024];
-                                int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
-
-                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
-                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
-
-                                string decryptedMessage = vignere.Decrypt(encryptedMessage);
-                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
+                                if (clientSocket.Poll(30 * 1000 * 1000, SelectMode.SelectRead)) 
                                 {
-                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                    break;
+                                    byte[] buffer = new byte[1024];
+                                    int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
+
+                                    string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                                    Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+
+                                    string decryptedMessage = vignere.Decrypt(encryptedMessage);
+                                    Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
+
+                                    if (decryptedMessage.ToLower() == "kraj")
+                                    {
+                                        Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Poruka nije stigla.");
                                 }
                             }
                             catch (SocketException ex)

@@ -34,6 +34,8 @@ namespace Client
                     IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Loopback, 50001);
                     EndPoint serverResponseEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
+                    clientSocket.Blocking = false;
+
                     #endregion
 
                     #region Komunikacija
@@ -80,21 +82,29 @@ namespace Client
                                     Console.WriteLine("Prekinuta komunikacija sa serverom.");
                                     break;
                                 }
-
-                                byte[] buffer = new byte[1024];
-                                int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
-
-                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
-                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
-
-                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
-                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage.ToLower()}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
+                                
+                                if(clientSocket.Poll(30 * 1000 * 1000, SelectMode.SelectRead))
                                 {
-                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                    break;
+                                    byte[] buffer = new byte[1024];
+                                    int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
+
+                                    string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes).Trim();
+                                    Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+
+                                    string decryptedMessage = homophonic.Decrypt(encryptedMessage);
+                                    Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage.ToLower()}");
+
+                                    if (decryptedMessage.ToLower() == "kraj")
+                                    {
+                                        Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                        break;
+                                    }
                                 }
+                                else
+                                {
+                                    Console.WriteLine("Poruka nije stigla.");
+                                }
+                           
                             }
                             catch (SocketException ex)
                             {

@@ -444,7 +444,7 @@ namespace Server
         }
         static void CheckReconnection()
         {
-            Console.Write("\nDa li zelite ponovo da uspostavite komunikaciju sa serverom? (da/ne): ");
+            Console.Write("\nDa li zelite ponovo da uspostavite komunikaciju sa klijentom? (da/ne): ");
             string answer = Console.ReadLine().Trim().ToLower();
 
             while (answer != "da" && answer != "ne")

@@ -10,3 +10,9 @@ C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.csproj.Asse
 C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
 C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.dll
 C:\Users\User\Desktop\Mreze Projekat\Algorithms\obj\Debug\Algorithms.pdb
+E:\Faks\PRMuIS\Projekat\Algorithms\bin\Debug\Algorithms.dll
+E:\Faks\PRMuIS\Projekat\Algorithms\bin\Debug\Algorithms.pdb
+E:\Faks\PRMuIS\Projekat\Algorithms\obj\Debug\Algorithms.csproj.AssemblyReference.cache
+E:\Faks\PRMuIS\Projekat\Algorithms\obj\Debug\Algorithms.csproj.CoreCompileInputs.cache
+E:\Faks\PRMuIS\Projekat\Algorithms\obj\Debug\Algorithms.dll
+E:\Faks\PRMuIS\Projekat\Algorithms\obj\Debug\Algorithms.pdb

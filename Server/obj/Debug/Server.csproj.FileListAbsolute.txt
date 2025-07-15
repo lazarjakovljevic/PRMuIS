@@ -29,3 +29,16 @@ C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.dll
 C:\Users\User\Desktop\Mreze Projekat\Server\bin\Debug\Communication.pdb
 D:\FAKS\MREZE\Project\Server\bin\Debug\Communication.dll
 D:\FAKS\MREZE\Project\Server\bin\Debug\Communication.pdb
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Server.exe.config
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Server.exe
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Server.pdb
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Algorithms.dll
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Communication.dll
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Algorithms.pdb
+E:\Faks\PRMuIS\Projekat\Server\bin\Debug\Communication.pdb
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.csproj.AssemblyReference.cache
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.exe.config
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.csproj.CoreCompileInputs.cache
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.csproj.Up2Date
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.exe
+E:\Faks\PRMuIS\Projekat\Server\obj\Debug\Server.pdb

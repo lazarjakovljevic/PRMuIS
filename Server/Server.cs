@@ -3,6 +3,7 @@ using Communication;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -214,167 +215,174 @@ namespace Server
 
                     Socket serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                     IPEndPoint serverEP = new IPEndPoint(IPAddress.Any, 50001);
-
                     serverSocket.Bind(serverEP);
-                    serverSocket.Listen(2);
+                    serverSocket.Listen(10);
+                    serverSocket.Blocking = false;
 
-                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"");
+                    Console.WriteLine($"\nServer je stavljen u stanje osluskivanja i ocekuje komunikaciju na \"{serverEP}\"\n");
 
-                    Socket acceptedSocket = serverSocket.Accept();
+                    List<Socket> clientSockets = new List<Socket>();
+                    Dictionary<Socket, IPEndPoint> clientEndPoints = new Dictionary<Socket, IPEndPoint>();
+                    List<NacinKomunikacije> komunikacije = new List<NacinKomunikacije>();
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    byte[] buffer = new byte[1024];
 
-                    IPEndPoint clientEndPoint = acceptedSocket.RemoteEndPoint as IPEndPoint;
-                    Console.WriteLine($"\nPovezao se novi klijent!");
-                    Console.WriteLine($"IP adresa:{clientEndPoint.Address,-10}");
-                    Console.WriteLine($"Port:{clientEndPoint.Port,-10}\n\n");
                     #endregion
 
                     #region Komunikacija
 
-                    byte[] buffer = new byte[1024];
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    List<NacinKomunikacije> communications = new List<NacinKomunikacije>();
-
                     while (true)
                     {
-                        try
+                        // pravimo novog klijenta
+                        if (serverSocket.Poll(1000, SelectMode.SelectRead))
                         {
-                            int numOfBytes = acceptedSocket.Receive(buffer);
+                            Socket newClient = serverSocket.Accept();
+                            newClient.Blocking = false;
+                            clientSockets.Add(newClient);
 
-                            if (numOfBytes == 0)
-                            {
-                                Console.WriteLine("\nKlijent je zavrsio sa radom");
-                                break;
-                            }
+                            IPEndPoint EndPoint = newClient.RemoteEndPoint as IPEndPoint;
+                            clientEndPoints[newClient] = EndPoint;
 
-                            int separatorIndex = Array.IndexOf(buffer, (byte)'|');
-                            if (separatorIndex == -1)
-                            {
-                                Console.WriteLine("Greska: Separator nije pronadjen.");
-                                continue;
-                            }
-
-                            // Bajtovi za objekat
-                            byte[] objectBytes = new byte[separatorIndex];
-                            Array.Copy(buffer, 0, objectBytes, 0, separatorIndex);
-
-                            // Bajtovi za poruku
-                            int messageLength = numOfBytes - separatorIndex - 1;
-                            byte[] messageBytes = new byte[messageLength];
-                            Array.Copy(buffer, separatorIndex + 1, messageBytes, 0, messageLength);
-
-                            // Deserijalizacija objekta
-                            NacinKomunikacije nacin;
-                            using (MemoryStream ms = new MemoryStream(objectBytes))
-                            {
-                                nacin = (NacinKomunikacije)formatter.Deserialize(ms);
-                                nacin.ClientEndPoint = clientEndPoint;
-                                communications.Add(nacin);
-                            }
-
-                            string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
-                            Console.WriteLine($"Primljena enkriptovana poruka: {encryptedMessage}");
-                            Console.WriteLine($"Adresa posiljaoca: {nacin.ClientEndPoint}");
-                            Console.WriteLine($"Algoritam: {nacin.Algorithm}");
-                            Console.WriteLine($"Korisceni kljucevi: \n{nacin.UsedKey}");
-
-                            PrintCommunicationList(communications);
-
-                            //--- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
-
-                            #region Homofono sifrovanje
-
-                            if (nacin.Algorithm == "HOMOFONO")
-                            {
-                                Homophonic homophonic = new Homophonic();
-                                //string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                                string decryptedMessage = homophonic.Decrypt(encryptedMessage);
-                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage.ToLower()}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-
-                                Console.Write("\nUnesite odgovor klijentu: ");
-                                string response = Console.ReadLine();
-
-                                string encryptingMessage = homophonic.Encrypt(response);
-                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
-
-                                if (response.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-                            }
-
-                            #endregion
-
-                            #region Sifrovanje upotrebom bitova
-
-                            if (nacin.Algorithm == "BITOVI")
-                            {
-                                Bitwise bitwise = new Bitwise();
-                                //string decryptedMessage = Encoding.UTF8.GetString(buffer, 0, numOfBytes);
-                                string decryptedMessage = bitwise.Decrypt(encryptedMessage);
-                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-
-                                Console.Write("\nUnesite odgovor klijentu: ");
-                                string response = Console.ReadLine();
-
-                                string encryptingMessage = bitwise.Encrypt(response);
-                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
-
-                                if (response.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-                            }
-
-                            #endregion
-
-                            #region Vigenerovo sifrovanje
-
-                            if (nacin.Algorithm == "VIZNER")
-                            {
-                                Vignere vignere = new Vignere();
-
-                                string decryptedMessage = vignere.Decrypt(encryptedMessage);
-                                Console.WriteLine($"\nDekriptovana poruka od klijenta \"{clientEndPoint}\": {decryptedMessage}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-
-                                Console.Write("\nUnesite odgovor klijentu: ");
-                                string response = Console.ReadLine();
-
-                                string encryptingMessage = vignere.Encrypt(response);
-                                numOfBytes = acceptedSocket.Send(Encoding.UTF8.GetBytes(encryptingMessage));
-
-                                if (response.ToLower() == "kraj")
-                                {
-                                    Console.WriteLine("\nPrekinuta komunikacija sa klijentom.");
-                                    break;
-                                }
-                            }
-
-                            #endregion
+                            Console.WriteLine($"Novi klijent povezan: {EndPoint.Address}:{EndPoint.Port}\n");
                         }
-                        catch (SocketException ex)
+
+                        // komunikacija sa svakim klijentom
+                        foreach (var client in clientSockets.ToList()) // kopija liste zbog brisanja
                         {
-                            Console.WriteLine($"\nDoslo je do greske prilikom prijema poruke! \n{ex}");
-                            break;
+                            try
+                            {
+                                if (client.Poll(1000, SelectMode.SelectRead))
+                                {
+                                    int numOfBytes = client.Receive(buffer);
+
+                                    if (numOfBytes == 0)
+                                    {
+                                        Console.WriteLine($"Klijent {client.RemoteEndPoint} prekinuo vezu.");
+                                        client.Close();
+                                        clientSockets.Remove(client);
+                                        clientEndPoints.Remove(client);
+                                        continue;
+                                    }
+
+                                    int separatorIndex = Array.IndexOf(buffer, (byte)'|');
+                                    if (separatorIndex == -1)
+                                    {
+                                        Console.WriteLine("Greska: Separator nije pronadjen.");
+                                        continue;
+                                    }
+
+                                    byte[] objectBytes = new byte[separatorIndex];
+                                    Array.Copy(buffer, 0, objectBytes, 0, separatorIndex);
+
+                                    int messageLength = numOfBytes - separatorIndex - 1;
+                                    byte[] messageBytes = new byte[messageLength];
+                                    Array.Copy(buffer, separatorIndex + 1, messageBytes, 0, messageLength);
+
+                                    NacinKomunikacije nacin;
+                                    using (MemoryStream ms = new MemoryStream(objectBytes))
+                                    {
+                                        nacin = (NacinKomunikacije)formatter.Deserialize(ms);
+                                        nacin.ClientEndPoint = clientEndPoints[client];
+                                        komunikacije.Add(nacin);
+                                    }
+
+                                    string encryptedMessage = Encoding.UTF8.GetString(messageBytes);
+                                    Console.WriteLine($"Primljena enkriptovana poruka: {encryptedMessage}");
+                                    Console.WriteLine($"Adresa posiljaoca: {nacin.ClientEndPoint}");
+                                    Console.WriteLine($"Algoritam: {nacin.Algorithm}");
+                                    Console.WriteLine($"Korisceni kljucevi: {nacin.UsedKey}");
+
+                                    PrintCommunicationList(komunikacije);
+
+                                    // --- ODAVDE cemo razlikovati logiku shodno tome koji algoritam se koristi ---
+                                    string decryptedMessage = "";
+                                    string response = "";
+
+                                    if (nacin.Algorithm == "HOMOFONO")
+                                    {
+                                        Homophonic homophonic = new Homophonic();
+                                        decryptedMessage = homophonic.Decrypt(encryptedMessage).Trim();
+
+                                        Console.WriteLine($"\nDekriptovana poruka: {decryptedMessage}");
+
+                                        if (decryptedMessage.ToLower() == "kraj")
+                                        {
+                                            Console.WriteLine("Klijent je zatvorio konekciju.");
+                                            client.Close();
+                                            clientSockets.Remove(client);
+                                            clientEndPoints.Remove(client);
+                                            continue;
+                                        }
+
+                                        Console.Write("\nUnesite odgovor klijentu: ");
+                                        response = Console.ReadLine();
+
+                                        string encryptedResponse = homophonic.Encrypt(response);
+                                        client.Send(Encoding.UTF8.GetBytes(encryptedResponse));
+                                    }
+
+                                    else if (nacin.Algorithm == "BITOVI")
+                                    {
+                                        Bitwise bitwise = new Bitwise();
+                                        decryptedMessage = bitwise.Decrypt(encryptedMessage).Trim();
+
+                                        Console.WriteLine($"\nDekriptovana poruka: {decryptedMessage}");
+
+                                        if (decryptedMessage.ToLower() == "kraj")
+                                        {
+                                            Console.WriteLine("Klijent je zatvorio konekciju.");
+                                            client.Close();
+                                            clientSockets.Remove(client);
+                                            clientEndPoints.Remove(client);
+                                            continue;
+                                        }
+
+                                        Console.Write("\nUnesite odgovor klijentu: ");
+                                        response = Console.ReadLine();
+
+                                        string encryptedResponse = bitwise.Encrypt(response);
+                                        client.Send(Encoding.UTF8.GetBytes(encryptedResponse));
+                                    }
+
+                                    else if (nacin.Algorithm == "VIZNER")
+                                    {
+                                        Vignere vignere = new Vignere();
+                                        decryptedMessage = vignere.Decrypt(encryptedMessage).Trim();
+
+                                        Console.WriteLine($"\nDekriptovana poruka: {decryptedMessage}");
+
+                                        if (decryptedMessage.ToLower() == "kraj")
+                                        {
+                                            Console.WriteLine("Klijent je zatvorio konekciju.");
+                                            client.Close();
+                                            clientSockets.Remove(client);
+                                            clientEndPoints.Remove(client);
+                                            continue;
+                                        }
+
+                                        Console.Write("\nUnesite odgovor klijentu: ");
+                                        response = Console.ReadLine();
+
+                                        string encryptedResponse = vignere.Encrypt(response);
+                                        client.Send(Encoding.UTF8.GetBytes(encryptedResponse));
+                                    }
+
+                                    if (response.ToLower() == "kraj")
+                                    {
+                                        Console.WriteLine("Zatvaranje veze sa klijentom po zahtevu servera.");
+                                        client.Close();
+                                        clientSockets.Remove(client);
+                                        clientEndPoints.Remove(client);
+                                    }
+                                }
+                            }
+                            catch (SocketException ex)
+                            {
+                                Console.WriteLine($"Greska u komunikaciji sa klijentom: {ex.Message}");
+                                client.Close();
+                                clientSockets.Remove(client);
+                                clientEndPoints.Remove(client);
+                            }
                         }
                     }
                     #endregion
@@ -382,9 +390,11 @@ namespace Server
                     #region Zatvaranje uticnice
 
                     Console.WriteLine("Server zavrsava sa radom.");
-                    acceptedSocket.Close();
+                    foreach (var client in clientSockets)
+                    {
+                        client.Close();
+                    }
                     serverSocket.Close();
-
                     #endregion
                 }
                 #endregion
@@ -397,7 +407,7 @@ namespace Server
         public static void PrintCommunicationList(List<NacinKomunikacije> communications)
         {
             Console.WriteLine("\n| {0,-25} | {1,-12} | {2,-97} |",
-                "Client EndPoint", "Algorithm", "Used Key");
+                "Client EndPoint", "Algoritam", "Korisceni kljuc");
             Console.WriteLine(new string('-', 143));
 
             foreach (var communication in communications)

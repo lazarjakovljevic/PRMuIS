@@ -82,8 +82,8 @@ namespace Client
                                     Console.WriteLine("Prekinuta komunikacija sa serverom.");
                                     break;
                                 }
-                                
-                                if(clientSocket.Poll(30 * 1000 * 1000, SelectMode.SelectRead))
+
+                                if (clientSocket.Poll(30 * 1000 * 1000, SelectMode.SelectRead))
                                 {
                                     byte[] buffer = new byte[1024];
                                     int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
@@ -104,7 +104,7 @@ namespace Client
                                 {
                                     Console.WriteLine("Poruka nije stigla.");
                                 }
-                           
+
                             }
                             catch (SocketException ex)
                             {
@@ -158,19 +158,27 @@ namespace Client
                                     break;
                                 }
 
-                                byte[] buffer = new byte[1024];
-                                int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
-
-                                string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
-                                Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
-
-                                string decryptedMessage = bitwise.Decrypt(encryptedMessage);
-                                Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
-
-                                if (decryptedMessage.ToLower() == "kraj")
+                                if (clientSocket.Poll(30 * 1000 * 1000, SelectMode.SelectRead))
                                 {
-                                    Console.WriteLine("Prekinuta komunikacija sa serverom.");
-                                    break;
+                                    byte[] buffer = new byte[1024];
+                                    int receivedBytes = clientSocket.ReceiveFrom(buffer, ref serverResponseEndPoint);
+
+                                    string encryptedMessage = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                                    Console.WriteLine($"Primljen enkriptovani odgovor: {encryptedMessage}");
+
+                                    string decryptedMessage = bitwise.Decrypt(encryptedMessage);
+                                    Console.WriteLine($"Dekriptovani odgovor od servera: {decryptedMessage}");
+
+                                    if (decryptedMessage.ToLower() == "kraj")
+                                    {
+                                        Console.WriteLine("Prekinuta komunikacija sa serverom.");
+                                        break;
+                                    }
+
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Poruka nije stigla.");
                                 }
                             }
                             catch (SocketException ex)
@@ -376,7 +384,7 @@ namespace Client
                                     continue;
 
 
-                                Bitwise bitwise = new Bitwise();    
+                                Bitwise bitwise = new Bitwise();
                                 string encryptingMessage = bitwise.Encrypt(message);
 
                                 string key = bitwise.Key;
